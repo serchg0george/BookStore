@@ -1,12 +1,11 @@
 package com.bookstore.entity;
 
+import com.bookstore.entity.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -14,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "t_order_item")
-public class OrderItemEntity extends BaseEntity{
+public class OrderItemEntity extends BaseEntity {
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     OrderEntity order;

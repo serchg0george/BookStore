@@ -1,5 +1,6 @@
 package com.bookstore.entity;
 
+import com.bookstore.entity.base.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -14,7 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "t_books")
-public class BookEntity extends BaseEntity{
+public class BookEntity extends BaseEntity {
 
     @Column(name = "book_title", length = 60, nullable = false, unique = true)
     private String bookTitle;
@@ -23,6 +24,6 @@ public class BookEntity extends BaseEntity{
     private String bookAuthor;
 
     @Column(name = "book_isbn", length = 13, nullable = false)
-    private int bookIsbn;
+    private Integer bookIsbn;
 
 }

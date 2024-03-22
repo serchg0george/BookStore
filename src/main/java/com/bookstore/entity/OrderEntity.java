@@ -1,5 +1,6 @@
 package com.bookstore.entity;
 
+import com.bookstore.entity.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "t_orders")
-public class OrderEntity extends BaseEntity{
+public class OrderEntity extends BaseEntity {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "order", fetch = FetchType.LAZY)
     private List<OrderItemEntity> orderItemEntity;
