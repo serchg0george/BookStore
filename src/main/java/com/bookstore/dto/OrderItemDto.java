@@ -23,6 +23,5 @@ public class OrderItemDto extends BaseDto {
     private BookEntity book;
 
     @NotNull
-    @Max(13)
     private Integer quantity;
 }
