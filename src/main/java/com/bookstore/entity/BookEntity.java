@@ -24,6 +24,6 @@ public class BookEntity extends BaseEntity {
     private String bookAuthor;
 
     @Column(name = "book_isbn", length = 13, nullable = false)
-    private Integer bookIsbn;
+    private String bookIsbn;
 
 }
