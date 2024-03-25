@@ -5,6 +5,7 @@ import com.bookstore.entity.OrderEntity;
 import com.bookstore.mapper.OrderMapper;
 import com.bookstore.repository.OrderRepository;
 import com.bookstore.service.OrderService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
 
     @Override
+    @Transactional
     public OrderDto createOrder(OrderDto order) {
         OrderEntity orderEntity = orderMapper.mapDtoToEntity(order);
         OrderEntity savedOrderEntity = orderRepository.save(orderEntity);
@@ -41,6 +43,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public OrderDto updateOrder(OrderDto order) {
         OrderEntity orderEntity = orderMapper.mapDtoToEntity(order);
         Optional<OrderEntity> optionalOrderEntity = orderRepository.findById(orderEntity.getId());

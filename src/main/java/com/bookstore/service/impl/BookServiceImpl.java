@@ -5,6 +5,7 @@ import com.bookstore.entity.BookEntity;
 import com.bookstore.mapper.BookMapper;
 import com.bookstore.repository.BookRepository;
 import com.bookstore.service.BookService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ public class BookServiceImpl implements BookService {
     private final BookMapper bookMapper;
 
     @Override
+    @Transactional
     public BookDto createBook(BookDto book) {
         BookEntity bookEntity = bookMapper.mapDtoToEntity(book);
         BookEntity savedBook = bookRepository.save(bookEntity);
@@ -42,6 +44,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional
     public BookDto updateBook(BookDto book) {
         BookEntity bookEntity = bookMapper.mapDtoToEntity(book);
         Optional<BookEntity> optionalBookEntity = bookRepository.findById(bookEntity.getId());

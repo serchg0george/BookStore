@@ -5,6 +5,7 @@ import com.bookstore.entity.CustomerEntity;
 import com.bookstore.mapper.CustomerMapper;
 import com.bookstore.repository.CustomerRepository;
 import com.bookstore.service.CustomerService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerMapper customerMapper;
 
     @Override
+    @Transactional
     public CustomerDto createCustomer(CustomerDto customer) {
         CustomerEntity customerEntity = customerMapper.mapDtoToEntity(customer);
         CustomerEntity savedCustomer = customerRepository.save(customerEntity);
@@ -42,6 +44,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    @Transactional
     public CustomerDto updateCustomer(CustomerDto customer) {
         CustomerEntity customerEntity = customerMapper.mapDtoToEntity(customer);
         Optional<CustomerEntity> optionalCustomerEntity = customerRepository.findById(customerEntity.getId());
