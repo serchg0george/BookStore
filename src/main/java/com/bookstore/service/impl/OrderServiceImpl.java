@@ -2,7 +2,9 @@ package com.bookstore.service.impl;
 
 import com.bookstore.dto.OrderDto;
 import com.bookstore.entity.OrderEntity;
+import com.bookstore.entity.OrderItemEntity;
 import com.bookstore.mapper.OrderMapper;
+import com.bookstore.repository.OrderItemRepository;
 import com.bookstore.repository.OrderRepository;
 import com.bookstore.service.OrderService;
 import jakarta.transaction.Transactional;
@@ -19,6 +21,19 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
+    private final OrderItemRepository orderItemRepository;
+
+    @Override
+    public OrderDto setOrderItemToOrder(Long orderItemId, Long orderId) {
+        OrderItemEntity orderItemEntity = orderItemRepository.findById(orderItemId)
+                .orElseThrow(() -> new RuntimeException("Order item isn't exist"));
+        OrderEntity orderEntity = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order isn't exist"));
+        orderItemEntity.setOrder(orderEntity);
+        orderItemRepository.save(orderItemEntity);
+        Optional<OrderEntity> order = orderRepository.findById(orderId);
+        return orderMapper.mapEntityToDto(order.get());
+    }
 
     @Override
     @Transactional
