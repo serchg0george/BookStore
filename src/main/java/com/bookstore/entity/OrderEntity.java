@@ -20,6 +20,6 @@ public class OrderEntity extends BaseEntity {
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "order", fetch = FetchType.LAZY)
     private List<OrderItemEntity> orderItemEntity;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REMOVE, CascadeType.REFRESH, CascadeType.MERGE})
     CustomerEntity customer;
 }

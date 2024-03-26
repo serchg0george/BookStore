@@ -18,7 +18,7 @@ public class OrderItemEntity extends BaseEntity {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     OrderEntity order;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REMOVE, CascadeType.REFRESH})
     BookEntity book;
 
     @Column(name = "order_item_quantity", nullable = false)
