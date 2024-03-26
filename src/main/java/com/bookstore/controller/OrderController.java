@@ -1,6 +1,7 @@
 package com.bookstore.controller;
 
 import com.bookstore.dto.OrderDto;
+import com.bookstore.dto.OrderItemToOrderDto;
 import com.bookstore.entity.OrderEntity;
 import com.bookstore.mapper.OrderMapper;
 import com.bookstore.service.OrderService;
@@ -22,6 +23,12 @@ public class OrderController {
 
     private final OrderService orderService;
     private final OrderMapper orderMapper;
+
+    @PutMapping
+    public ResponseEntity<OrderDto> setOrderItemToOrder(@RequestBody OrderItemToOrderDto itemToOrderDto) {
+        OrderDto orderDto = orderService.setOrderItemToOrder(itemToOrderDto.orderItemId(), itemToOrderDto.orderId());
+        return new ResponseEntity<>(orderDto, HttpStatus.OK);
+    }
 
     @PostMapping
     public ResponseEntity<String> createOrder(@Valid @RequestBody OrderDto orderDto) {
