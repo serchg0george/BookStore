@@ -1,6 +1,7 @@
 package com.bookstore.entity;
 
 import com.bookstore.entity.base.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,6 +15,8 @@ import lombok.Setter;
 @Entity
 @Table(name = "t_order_item")
 public class OrderItemEntity extends BaseEntity {
+
+    @JsonBackReference
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REMOVE, CascadeType.REFRESH})
     OrderEntity order;
 
