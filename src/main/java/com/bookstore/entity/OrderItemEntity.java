@@ -14,8 +14,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "t_order_item")
 public class OrderItemEntity extends BaseEntity {
-
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REMOVE, CascadeType.REFRESH})
     OrderEntity order;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REMOVE, CascadeType.REFRESH})
