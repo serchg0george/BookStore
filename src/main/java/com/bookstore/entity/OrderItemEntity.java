@@ -17,10 +17,10 @@ import lombok.Setter;
 public class OrderItemEntity extends BaseEntity {
 
     @JsonBackReference
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REMOVE, CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.DETACH})
     OrderEntity order;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REMOVE, CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     BookEntity book;
 
     @Column(name = "order_item_quantity", nullable = false)
