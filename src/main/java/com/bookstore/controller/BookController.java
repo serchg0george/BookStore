@@ -3,6 +3,7 @@ package com.bookstore.controller;
 import com.bookstore.dto.BookDto;
 import com.bookstore.entity.BookEntity;
 import com.bookstore.mapper.BookMapper;
+import com.bookstore.search.BookSearchCriteria;
 import com.bookstore.service.BookService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -53,4 +54,26 @@ public class BookController {
         bookService.deleteBook(bookId);
         return new ResponseEntity<>(DELETED_SUCCESS, HttpStatus.OK);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<BookDto>> findBookByAuthor(@RequestBody BookSearchCriteria searchCriteria) {
+        if (searchCriteria.getAuthor() != null && searchCriteria.getTitle() != null && searchCriteria.getIsbn() != null) {
+            return ResponseEntity.ok(bookService.findBookByAuthorAndTitleAndIsbn(searchCriteria.getAuthor(), searchCriteria.getTitle(), searchCriteria.getIsbn()));
+        } else if (searchCriteria.getAuthor() != null && searchCriteria.getTitle() != null) {
+            return ResponseEntity.ok(bookService.findBookByAuthorAndTitle(searchCriteria.getAuthor(), searchCriteria.getTitle()));
+        } else if (searchCriteria.getAuthor() != null && searchCriteria.getIsbn() != null) {
+            return ResponseEntity.ok(bookService.findBookByAuthorAndIsbn(searchCriteria.getAuthor(), searchCriteria.getIsbn()));
+        } else if (searchCriteria.getTitle() != null && searchCriteria.getIsbn() != null) {
+            return ResponseEntity.ok(bookService.findBookByTitleAndIsbn(searchCriteria.getTitle(), searchCriteria.getIsbn()));
+        } else if (searchCriteria.getAuthor() != null) {
+            return ResponseEntity.ok(bookService.findBookByAuthor(searchCriteria.getAuthor()));
+        } else if (searchCriteria.getTitle() != null) {
+            return ResponseEntity.ok(bookService.findBookByTitle(searchCriteria.getTitle()));
+        } else if (searchCriteria.getIsbn() != null) {
+            return ResponseEntity.ok(bookService.findBookByIsbn(searchCriteria.getIsbn()));
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 }

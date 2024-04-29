@@ -66,4 +66,63 @@ public class BookServiceImpl implements BookService {
         }
         bookRepository.deleteById(bookId);
     }
+
+    @Override
+    public List<BookDto> findBookByAuthor(String author) {
+        List<BookEntity> bookEntityList = bookRepository.findAllByBookAuthorIgnoreCase(author);
+        return bookEntityList.stream()
+                .map(bookMapper::mapEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookDto> findBookByTitle(String title) {
+        List<BookEntity> bookEntityList = bookRepository.findAllByBookTitleIgnoreCase(title);
+        return bookEntityList.stream()
+                .map(bookMapper::mapEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookDto> findBookByIsbn(String isbn) {
+        List<BookEntity> bookEntityList = bookRepository.findAllByBookIsbnIgnoreCase(isbn);
+        return bookEntityList.stream()
+                .map(bookMapper::mapEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookDto> findBookByAuthorAndTitle(String author, String title) {
+        List<BookEntity> bookEntityList = bookRepository.findAllByBookAuthorAndBookTitleIgnoreCase(author, title);
+        return bookEntityList.stream()
+                .map(bookMapper::mapEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookDto> findBookByAuthorAndIsbn(String author, String isbn) {
+        List<BookEntity> bookEntityList = bookRepository.findAllByBookAuthorAndBookIsbnIgnoreCase(author, isbn);
+        return bookEntityList.stream()
+                .map(bookMapper::mapEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookDto> findBookByTitleAndIsbn(String title, String isbn) {
+        List<BookEntity> bookEntityList = bookRepository.findAllByBookTitleAndBookIsbnIgnoreCase(title, isbn);
+        return bookEntityList.stream()
+                .map(bookMapper::mapEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookDto> findBookByAuthorAndTitleAndIsbn(String author, String title, String isbn) {
+
+        List<BookEntity> bookEntityList = bookRepository
+                .findAllByBookAuthorAndBookTitleAndBookIsbnIgnoreCase(author, title, isbn);
+
+        return bookEntityList.stream()
+                .map(bookMapper::mapEntityToDto)
+                .collect(Collectors.toList());
+    }
 }
