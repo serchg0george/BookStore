@@ -4,11 +4,19 @@ import com.bookstore.dto.CustomerDto;
 import com.bookstore.entity.CustomerEntity;
 import com.bookstore.mapper.CustomerMapper;
 import com.bookstore.repository.CustomerRepository;
+import com.bookstore.search.CustomerSearchRequest;
 import com.bookstore.service.CustomerService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,6 +27,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
+    private final EntityManager entityManager;
 
     @Override
     @Transactional
@@ -66,5 +75,42 @@ public class CustomerServiceImpl implements CustomerService {
             throw new RuntimeException("Customer isn't exist");
         }
         customerRepository.deleteById(customerId);
+    }
+
+    @Override
+    public List<CustomerDto> findCustomerByCriteria(CustomerSearchRequest request) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<CustomerEntity> criteriaQuery = criteriaBuilder.createQuery(CustomerEntity.class);
+        List<Predicate> predicates = new ArrayList<>();
+
+        Root<CustomerEntity> root = criteriaQuery.from(CustomerEntity.class);
+
+        if (request.getName() != null && !request.getName().isBlank()) {
+            Predicate namePredicate = criteriaBuilder
+                    .like(root.get("customerName"), "%" + request.getName() + "%");
+            predicates.add(namePredicate);
+        } else if (request.getAddress() != null && !request.getAddress().isBlank()) {
+            Predicate addressPredicate = criteriaBuilder
+                    .like(root.get("customerAddress"), "%" + request.getAddress() + "%");
+            predicates.add(addressPredicate);
+        } else if (request.getEmail() != null && !request.getEmail().isBlank()) {
+            Predicate emailPredicate = criteriaBuilder
+                    .like(root.get("customerEmail"), "%" + request.getEmail() + "%");
+            predicates.add(emailPredicate);
+        } else if (request.getPhone() != null && !request.getPhone().isBlank()) {
+            Predicate phonePredicate = criteriaBuilder
+                    .like(root.get("customerPhoneNumber"), "%" + request.getPhone() + "%");
+            predicates.add(phonePredicate);
+        }
+
+        criteriaQuery.where(
+                criteriaBuilder.or(predicates.toArray(new Predicate[0]))
+        );
+
+        TypedQuery<CustomerEntity> query = entityManager.createQuery(criteriaQuery);
+
+        return query.getResultList().stream()
+                .map(customerMapper::mapEntityToDto)
+                .collect(Collectors.toList());
     }
 }

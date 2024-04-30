@@ -3,6 +3,7 @@ package com.bookstore.controller;
 import com.bookstore.dto.CustomerDto;
 import com.bookstore.entity.CustomerEntity;
 import com.bookstore.mapper.CustomerMapper;
+import com.bookstore.search.CustomerSearchRequest;
 import com.bookstore.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -52,5 +53,11 @@ public class CustomerController {
     public ResponseEntity<String> deleteCustomer(@PathVariable("id") Long customerId) {
         customerService.deleteCustomer(customerId);
         return new ResponseEntity<>(DELETED_SUCCESS, HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<CustomerDto>> searchCustomer(@RequestBody CustomerSearchRequest request) {
+        List<CustomerDto> customerDtoList = customerService.findCustomerByCriteria(request);
+        return ResponseEntity.ok(customerDtoList);
     }
 }
