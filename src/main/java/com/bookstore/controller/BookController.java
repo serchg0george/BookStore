@@ -57,7 +57,7 @@ public class BookController {
 
     @GetMapping("/search")
     public ResponseEntity<List<BookDto>> findBookByCriteria(@RequestBody BookSearchRequest request) {
-        List<BookDto> bookDtoList = bookService.findAllByCriteria(request);
+        List<BookDto> bookDtoList = bookService.findBookByCriteria(request);
         return ResponseEntity.ok(bookDtoList);
     }
 }

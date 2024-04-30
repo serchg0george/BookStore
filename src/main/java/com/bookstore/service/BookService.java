@@ -16,5 +16,5 @@ public interface BookService {
 
     void deleteBook(Long bookId);
 
-    List<BookDto> findAllByCriteria(BookSearchRequest request);
+    List<BookDto> findBookByCriteria(BookSearchRequest request);
 }
