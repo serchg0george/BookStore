@@ -3,7 +3,7 @@ package com.bookstore.search;
 import lombok.Getter;
 
 @Getter
-public class BookSearchCriteria {
+public class BookSearchRequest {
     private String author;
     private String title;
     private String isbn;

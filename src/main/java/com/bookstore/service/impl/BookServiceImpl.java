@@ -4,11 +4,19 @@ import com.bookstore.dto.BookDto;
 import com.bookstore.entity.BookEntity;
 import com.bookstore.mapper.BookMapper;
 import com.bookstore.repository.BookRepository;
+import com.bookstore.search.BookSearchRequest;
 import com.bookstore.service.BookService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,6 +27,7 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
+    private final EntityManager entityManager;
 
     @Override
     @Transactional
@@ -68,60 +77,34 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> findBookByAuthor(String author) {
-        List<BookEntity> bookEntityList = bookRepository.findAllByBookAuthorIgnoreCase(author);
-        return bookEntityList.stream()
-                .map(bookMapper::mapEntityToDto)
-                .collect(Collectors.toList());
-    }
+    public List<BookDto> findAllByCriteria(BookSearchRequest request) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<BookEntity> criteriaQuery = criteriaBuilder.createQuery(BookEntity.class);
+        List<Predicate> predicates = new ArrayList<>();
 
-    @Override
-    public List<BookDto> findBookByTitle(String title) {
-        List<BookEntity> bookEntityList = bookRepository.findAllByBookTitleIgnoreCase(title);
-        return bookEntityList.stream()
-                .map(bookMapper::mapEntityToDto)
-                .collect(Collectors.toList());
-    }
+        Root<BookEntity> root = criteriaQuery.from(BookEntity.class);
 
-    @Override
-    public List<BookDto> findBookByIsbn(String isbn) {
-        List<BookEntity> bookEntityList = bookRepository.findAllByBookIsbnIgnoreCase(isbn);
-        return bookEntityList.stream()
-                .map(bookMapper::mapEntityToDto)
-                .collect(Collectors.toList());
-    }
+        if (request.getTitle() != null && !request.getTitle().isBlank()) {
+            Predicate titlePredicate = criteriaBuilder
+                    .like(root.get("bookTitle"), "%" + request.getTitle() + "%");
+            predicates.add(titlePredicate);
+        } else if (request.getAuthor() != null && !request.getAuthor().isBlank()) {
+            Predicate authorPredicate = criteriaBuilder
+                    .like(root.get("bookAuthor"), "%" + request.getAuthor() + "%");
+            predicates.add(authorPredicate);
+        } else if (request.getIsbn() != null && !request.getIsbn().isBlank()) {
+            Predicate isbnPredicate = criteriaBuilder
+                    .like(root.get("bookIsbn"), "%" + request.getIsbn() + "%");
+            predicates.add(isbnPredicate);
+        }
 
-    @Override
-    public List<BookDto> findBookByAuthorAndTitle(String author, String title) {
-        List<BookEntity> bookEntityList = bookRepository.findAllByBookAuthorAndBookTitleIgnoreCase(author, title);
-        return bookEntityList.stream()
-                .map(bookMapper::mapEntityToDto)
-                .collect(Collectors.toList());
-    }
+        criteriaQuery.where(
+                criteriaBuilder.or(predicates.toArray(new Predicate[0]))
+        );
 
-    @Override
-    public List<BookDto> findBookByAuthorAndIsbn(String author, String isbn) {
-        List<BookEntity> bookEntityList = bookRepository.findAllByBookAuthorAndBookIsbnIgnoreCase(author, isbn);
-        return bookEntityList.stream()
-                .map(bookMapper::mapEntityToDto)
-                .collect(Collectors.toList());
-    }
+        TypedQuery<BookEntity> query = entityManager.createQuery(criteriaQuery);
 
-    @Override
-    public List<BookDto> findBookByTitleAndIsbn(String title, String isbn) {
-        List<BookEntity> bookEntityList = bookRepository.findAllByBookTitleAndBookIsbnIgnoreCase(title, isbn);
-        return bookEntityList.stream()
-                .map(bookMapper::mapEntityToDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<BookDto> findBookByAuthorAndTitleAndIsbn(String author, String title, String isbn) {
-
-        List<BookEntity> bookEntityList = bookRepository
-                .findAllByBookAuthorAndBookTitleAndBookIsbnIgnoreCase(author, title, isbn);
-
-        return bookEntityList.stream()
+        return query.getResultList().stream()
                 .map(bookMapper::mapEntityToDto)
                 .collect(Collectors.toList());
     }
