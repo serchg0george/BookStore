@@ -2,7 +2,6 @@ package com.bookstore.controller;
 
 import com.bookstore.dto.OrderDto;
 import com.bookstore.dto.OrderItemToOrderDto;
-import com.bookstore.entity.OrderEntity;
 import com.bookstore.mapper.OrderMapper;
 import com.bookstore.service.OrderService;
 import jakarta.validation.Valid;
@@ -13,8 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.bookstore.controller.ResponseStatusConstants.CREATED_SUCCESS;
-import static com.bookstore.controller.ResponseStatusConstants.DELETED_SUCCESS;
+import static com.bookstore.controller.ResponseStatusConstants.*;
 
 @RestController
 @AllArgsConstructor
@@ -32,32 +30,30 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<String> createOrder(@Valid @RequestBody OrderDto orderDto) {
-        orderService.createOrder(orderDto);
+        orderService.create(orderDto);
         return new ResponseEntity<>(CREATED_SUCCESS, HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<List<OrderDto>> getAllOrders() {
-        return new ResponseEntity<>(orderService.getAllOrders(), HttpStatus.OK);
+        return new ResponseEntity<>(orderService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("{id}")
     public ResponseEntity<OrderDto> getOrderById(@PathVariable("id") Long orderId) {
-        return new ResponseEntity<>(orderService.getOrderById(orderId), HttpStatus.OK);
+        return new ResponseEntity<>(orderService.getbyId(orderId), HttpStatus.OK);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<OrderDto> updateOrder(@PathVariable("id") Long orderId,
-                                                @Valid @RequestBody OrderDto orderDto) {
-        OrderEntity orderEntity = orderMapper.mapDtoToEntity(orderDto);
-        orderEntity.setId(orderId);
-        OrderDto updatedOrder = orderService.updateOrder(orderMapper.mapEntityToDto(orderEntity));
-        return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
+    public ResponseEntity<String> updateOrder(@PathVariable("id") Long orderId,
+                                              @Valid @RequestBody OrderDto orderDto) {
+        orderService.update(orderDto, orderId);
+        return new ResponseEntity<>(UPDATED_SUCCESS, HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteOrder(@PathVariable("id") Long orderId) {
-        orderService.deleteOrder(orderId);
+        orderService.delete(orderId);
         return new ResponseEntity<>(DELETED_SUCCESS, HttpStatus.OK);
     }
 

@@ -1,20 +1,10 @@
 package com.bookstore.service;
 
 import com.bookstore.dto.OrderDto;
+import com.bookstore.entity.OrderEntity;
 
-import java.util.List;
-
-public interface OrderService {
+public interface OrderService extends GenericService<OrderEntity, OrderDto> {
 
     OrderDto setOrderItemToOrder(Long orderItemId, Long orderId);
 
-    OrderDto createOrder(OrderDto order);
-
-    OrderDto getOrderById(Long orderId);
-
-    List<OrderDto> getAllOrders();
-
-    OrderDto updateOrder(OrderDto order);
-
-    void deleteOrder(Long orderId);
 }

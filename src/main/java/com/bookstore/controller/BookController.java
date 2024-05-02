@@ -1,7 +1,6 @@
 package com.bookstore.controller;
 
 import com.bookstore.dto.BookDto;
-import com.bookstore.entity.BookEntity;
 import com.bookstore.mapper.BookMapper;
 import com.bookstore.search.BookSearchRequest;
 import com.bookstore.service.BookService;
@@ -13,8 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.bookstore.controller.ResponseStatusConstants.CREATED_SUCCESS;
-import static com.bookstore.controller.ResponseStatusConstants.DELETED_SUCCESS;
+import static com.bookstore.controller.ResponseStatusConstants.*;
 
 @RestController
 @AllArgsConstructor
@@ -26,32 +24,30 @@ public class BookController {
 
     @PostMapping
     public ResponseEntity<String> createBook(@Valid @RequestBody BookDto book) {
-        bookService.createBook(book);
+        bookService.create(book);
         return new ResponseEntity<>(CREATED_SUCCESS, HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<List<BookDto>> getAllBooks() {
-        return new ResponseEntity<>(bookService.getAllBooks(), HttpStatus.OK);
+        return new ResponseEntity<>(bookService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("{id}")
     public ResponseEntity<BookDto> getBookById(@PathVariable("id") Long bookId) {
-        return new ResponseEntity<>(bookService.getBookById(bookId), HttpStatus.OK);
+        return new ResponseEntity<>(bookService.getbyId(bookId), HttpStatus.OK);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<BookDto> updateBook(@PathVariable("id") Long bookId,
-                                              @Valid @RequestBody BookDto bookDto) {
-        BookEntity bookEntity = bookMapper.mapDtoToEntity(bookDto);
-        bookEntity.setId(bookId);
-        BookDto updatedBook = bookService.updateBook(bookMapper.mapEntityToDto(bookEntity));
-        return new ResponseEntity<>(updatedBook, HttpStatus.OK);
+    public ResponseEntity<String> updateBook(@PathVariable("id") Long bookId,
+                                             @Valid @RequestBody BookDto bookDto) {
+        bookService.update(bookDto, bookId);
+        return new ResponseEntity<>(UPDATED_SUCCESS, HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteAddress(@PathVariable("id") Long bookId) {
-        bookService.deleteBook(bookId);
+        bookService.delete(bookId);
         return new ResponseEntity<>(DELETED_SUCCESS, HttpStatus.OK);
     }
 

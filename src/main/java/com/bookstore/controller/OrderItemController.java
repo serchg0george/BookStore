@@ -1,7 +1,6 @@
 package com.bookstore.controller;
 
 import com.bookstore.dto.OrderItemDto;
-import com.bookstore.entity.OrderItemEntity;
 import com.bookstore.mapper.OrderItemMapper;
 import com.bookstore.service.OrderItemService;
 import jakarta.validation.Valid;
@@ -12,8 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.bookstore.controller.ResponseStatusConstants.CREATED_SUCCESS;
-import static com.bookstore.controller.ResponseStatusConstants.DELETED_SUCCESS;
+import static com.bookstore.controller.ResponseStatusConstants.*;
 
 @RestController
 @AllArgsConstructor
@@ -25,32 +23,30 @@ public class OrderItemController {
 
     @PostMapping
     public ResponseEntity<String> createOrderItem(@Valid @RequestBody OrderItemDto orderItemDto) {
-        orderItemService.createOrderItem(orderItemDto);
+        orderItemService.create(orderItemDto);
         return new ResponseEntity<>(CREATED_SUCCESS, HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<List<OrderItemDto>> getAllOrderItems() {
-        return new ResponseEntity<>(orderItemService.getAllOrderItems(), HttpStatus.OK);
+        return new ResponseEntity<>(orderItemService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("{id}")
     public ResponseEntity<OrderItemDto> getOrderItemById(@PathVariable("id") Long orderItemId) {
-        return new ResponseEntity<>(orderItemService.getOrderItemById(orderItemId), HttpStatus.OK);
+        return new ResponseEntity<>(orderItemService.getbyId(orderItemId), HttpStatus.OK);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<OrderItemDto> updateOrderItem(@PathVariable("id") Long orderItemId,
-                                                        @Valid @RequestBody OrderItemDto orderItemDto) {
-        OrderItemEntity orderItemEntity = orderItemMapper.mapDtoToEntity(orderItemDto);
-        orderItemEntity.setId(orderItemId);
-        OrderItemDto updatedOrderItem = orderItemService.updateOrderItem(orderItemMapper.mapEntityToDto(orderItemEntity));
-        return new ResponseEntity<>(updatedOrderItem, HttpStatus.OK);
+    public ResponseEntity<String> updateOrderItem(@PathVariable("id") Long orderItemId,
+                                                  @Valid @RequestBody OrderItemDto orderItemDto) {
+        orderItemService.update(orderItemDto, orderItemId);
+        return new ResponseEntity<>(UPDATED_SUCCESS, HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteOrderItem(@PathVariable("id") Long orderItemId) {
-        orderItemService.deleteOrderItem(orderItemId);
+        orderItemService.delete(orderItemId);
         return new ResponseEntity<>(DELETED_SUCCESS, HttpStatus.OK);
     }
 
