@@ -1,12 +1,13 @@
 package com.bookstore.service;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface GenericService<E, D> {
 
     D create(D dto);
 
-    List<D> getAll();
+    Page<D> getAll(Pageable pageable);
 
     D getbyId(Long id);
 

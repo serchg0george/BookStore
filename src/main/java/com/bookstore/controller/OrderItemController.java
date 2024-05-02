@@ -5,11 +5,11 @@ import com.bookstore.mapper.OrderItemMapper;
 import com.bookstore.service.OrderItemService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 import static com.bookstore.controller.ResponseStatusConstants.*;
 
@@ -28,8 +28,8 @@ public class OrderItemController {
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderItemDto>> getAllOrderItems() {
-        return new ResponseEntity<>(orderItemService.getAll(), HttpStatus.OK);
+    public ResponseEntity<Page<OrderItemDto>> getAllOrderItems(Pageable pageable) {
+        return new ResponseEntity<>(orderItemService.getAll(pageable), HttpStatus.OK);
     }
 
     @GetMapping("{id}")

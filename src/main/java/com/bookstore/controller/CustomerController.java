@@ -6,6 +6,8 @@ import com.bookstore.search.CustomerSearchRequest;
 import com.bookstore.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,8 +31,8 @@ public class CustomerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CustomerDto>> getAllCustomers() {
-        return new ResponseEntity<>(customerService.getAll(), HttpStatus.OK);
+    public ResponseEntity<Page<CustomerDto>> getAllCustomers(Pageable pageable) {
+        return new ResponseEntity<>(customerService.getAll(pageable), HttpStatus.OK);
     }
 
     @GetMapping("{id}")
@@ -40,7 +42,7 @@ public class CustomerController {
 
     @PutMapping("{id}")
     public ResponseEntity<String> updateCustomer(@PathVariable("id") Long customerId,
-                                                      @Valid @RequestBody CustomerDto customerDto) {
+                                                 @Valid @RequestBody CustomerDto customerDto) {
         customerService.update(customerDto, customerId);
         return new ResponseEntity<>(UPDATED_SUCCESS, HttpStatus.OK);
     }

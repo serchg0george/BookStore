@@ -6,10 +6,9 @@ import com.bookstore.exception.base.BaseNotFoundException;
 import com.bookstore.mapper.base.BaseMapper;
 import com.bookstore.service.GenericService;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public abstract class GenericServiceImpl<E extends BaseEntity, D extends BaseDto> implements GenericService<E, D> {
 
@@ -24,11 +23,10 @@ public abstract class GenericServiceImpl<E extends BaseEntity, D extends BaseDto
     }
 
     @Override
-    public List<D> getAll() {
-        List<E> entityList = repository().findAll();
-        return entityList.stream()
-                .map(baseMapper()::mapEntityToDto)
-                .collect(Collectors.toList());
+    public Page<D> getAll(Pageable pageable) {
+        return repository()
+                .findAll(pageable)
+                .map(baseMapper()::mapEntityToDto);
     }
 
     @Override
