@@ -2,7 +2,6 @@ package com.bookstore.controller;
 
 import com.bookstore.dto.OrderItemDto;
 import com.bookstore.dto.response.GenericResponse;
-import com.bookstore.mapper.OrderItemMapper;
 import com.bookstore.service.OrderItemService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -18,7 +17,6 @@ import static com.bookstore.controller.ResponseStatusConstants.*;
 public class OrderItemController {
 
     private final OrderItemService orderItemService;
-    private final OrderItemMapper orderItemMapper;
 
     @PostMapping
     public ResponseEntity<String> createOrderItem(@Valid @RequestBody OrderItemDto orderItemDto) {

@@ -3,7 +3,6 @@ package com.bookstore.controller;
 import com.bookstore.dto.OrderDto;
 import com.bookstore.dto.OrderItemToOrderDto;
 import com.bookstore.dto.response.GenericResponse;
-import com.bookstore.mapper.OrderMapper;
 import com.bookstore.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -19,7 +18,6 @@ import static com.bookstore.controller.ResponseStatusConstants.*;
 public class OrderController {
 
     private final OrderService orderService;
-    private final OrderMapper orderMapper;
 
     @PutMapping
     public ResponseEntity<OrderDto> setOrderItemToOrder(@RequestBody OrderItemToOrderDto itemToOrderDto) {

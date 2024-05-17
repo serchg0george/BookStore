@@ -2,7 +2,6 @@ package com.bookstore.controller;
 
 import com.bookstore.dto.BookDto;
 import com.bookstore.dto.response.GenericResponse;
-import com.bookstore.mapper.BookMapper;
 import com.bookstore.search.BookSearchRequest;
 import com.bookstore.service.BookService;
 import jakarta.validation.Valid;
@@ -21,7 +20,6 @@ import static com.bookstore.controller.ResponseStatusConstants.*;
 public class BookController {
 
     private final BookService bookService;
-    private final BookMapper bookMapper;
 
     @PostMapping
     public ResponseEntity<String> createBook(@Valid @RequestBody BookDto book) {

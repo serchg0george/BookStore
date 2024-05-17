@@ -2,7 +2,6 @@ package com.bookstore.controller;
 
 import com.bookstore.dto.CustomerDto;
 import com.bookstore.dto.response.GenericResponse;
-import com.bookstore.mapper.CustomerMapper;
 import com.bookstore.search.CustomerSearchRequest;
 import com.bookstore.service.CustomerService;
 import jakarta.validation.Valid;
@@ -21,7 +20,6 @@ import static com.bookstore.controller.ResponseStatusConstants.*;
 public class CustomerController {
 
     private final CustomerService customerService;
-    private final CustomerMapper customerMapper;
 
     @PostMapping
     public ResponseEntity<String> createCustomer(@RequestBody CustomerDto customer) {
