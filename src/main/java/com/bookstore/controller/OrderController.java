@@ -2,12 +2,11 @@ package com.bookstore.controller;
 
 import com.bookstore.dto.OrderDto;
 import com.bookstore.dto.OrderItemToOrderDto;
+import com.bookstore.dto.response.GenericResponse;
 import com.bookstore.mapper.OrderMapper;
 import com.bookstore.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,8 +34,10 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<OrderDto>> getAllOrders(Pageable pageable) {
-        return new ResponseEntity<>(orderService.getAll(pageable), HttpStatus.OK);
+    public ResponseEntity<GenericResponse<OrderDto>> getAllOrders(
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize) {
+        return new ResponseEntity<>(orderService.getAll(pageNo, pageSize), HttpStatus.OK);
     }
 
     @GetMapping("{id}")

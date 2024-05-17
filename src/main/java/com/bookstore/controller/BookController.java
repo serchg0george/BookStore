@@ -1,13 +1,12 @@
 package com.bookstore.controller;
 
 import com.bookstore.dto.BookDto;
+import com.bookstore.dto.response.GenericResponse;
 import com.bookstore.mapper.BookMapper;
 import com.bookstore.search.BookSearchRequest;
 import com.bookstore.service.BookService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,8 +30,10 @@ public class BookController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<BookDto>> getAllBooks(Pageable pageable) {
-        return new ResponseEntity<>(bookService.getAll(pageable), HttpStatus.OK);
+    public ResponseEntity<GenericResponse<BookDto>> getAllBooks(
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize) {
+        return new ResponseEntity<>(bookService.getAll(pageNo, pageSize), HttpStatus.OK);
     }
 
     @GetMapping("{id}")
