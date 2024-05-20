@@ -45,7 +45,7 @@ public abstract class GenericServiceImpl<E extends BaseEntity, D extends BaseDto
     }
 
     @Override
-    public D getbyId(Long id) {
+    public D getById(Long id) {
         return repository()
                 .findById(id)
                 .map(baseMapper()::mapEntityToDto)

@@ -8,7 +8,7 @@ public interface GenericService<E, D> {
 
     GenericResponse<D> getAll(int pageNo, int pageSize);
 
-    D getbyId(Long id);
+    D getById(Long id);
 
     D update(D dto, Long id);
 

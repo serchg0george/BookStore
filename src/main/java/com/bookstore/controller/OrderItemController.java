@@ -33,7 +33,7 @@ public class OrderItemController {
 
     @GetMapping("{id}")
     public ResponseEntity<OrderItemDto> getOrderItemById(@PathVariable("id") Long orderItemId) {
-        return new ResponseEntity<>(orderItemService.getbyId(orderItemId), HttpStatus.OK);
+        return new ResponseEntity<>(orderItemService.getById(orderItemId), HttpStatus.OK);
     }
 
     @PutMapping("{id}")
