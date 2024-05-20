@@ -37,10 +37,9 @@ public class AuthorizationController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             return new ResponseEntity<>("User signed success!", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Provided username not found!", HttpStatus.UNAUTHORIZED);
         }
-
-
+        
     }
 
     @PostMapping("/register")
